@@ -1,0 +1,131 @@
+\documentclass[a4paper,10pt]{article}
+\input{nahuelMacros.tex}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\begin{document}
+
+\paragraph*{Como pensamos representar los elementos:}
+
+\begin{itemize}
+    \item $C$: Conjunto de las carreras de grado.
+
+
+          Lo representamos como Trie que se accede desde la instancia siu.
+    \item $c$: Nombre de carrera.
+
+
+          Lo representamos como string. Por lo tanto |c| indica el largo del nombre de la carrera.
+    \item $M_c$: Conjunto de las materias del grado c
+
+          Lo representamos como Trie que se accede desde la instancia de Carrera (Debajo desarrollaremos un ejemplo concreto)
+    \item $N_m$: Conjunto de nombres de la materia.
+
+          Los caracteres de estos nombres seran los nodos del Trie anterior. Los nodos significativos apuntaran a las materias respectivas.
+    \item $n$: Nombre de la materia
+
+          Lo representamos como un string, por lo tanto |n| indica el largo del nombre de la materia.
+    \item $E$ y $E_m$: los representaremos como enterous.
+\end{itemize}
+\salto{\baselineskip}
+Libretas universitarias $\rightarrow$ Trie acotado, lo que implica que las operaciones del trie son de O(1)
+
+{\small El nodo significativo de cada libreta apuntara a la instancia de Estudiante}
+
+\salto{\baselineskip}
+
+NombreCarreras $\rightarrow$ Trie no acotado, operaciones O(log(n))
+
+{\small El nodo significativo apuntara a la instancia de la Carrera}
+
+\salto{\baselineskip}
+
+NombreMaterias $\rightarrow$ Trie no acotado, operaciones O(log(n))
+
+{\small El nodo significativo apuntara a la instancia de Materia}
+
+\salto{\baselineskip}
+
+Veamos el siguiente ejemplo:
+\salto{\baselineskip}
+
+Tenemos la carrera 'licenciatura en fisica' y la carrera matematica, en la primera tenemos la materia
+
+"Matematica 1", y en la segunda tenemos 'Analisis 1', ambas siendo la misma materia.
+
+A traves del trie NombreCarreras accedemos a una instancia de la clase Carrera
+
+en el nodo significativo. Esta clase nos permite acceder a su trie NombreMaterias, y en el nodo significativo acceder a la instancia de la materia.
+
+
+
+\pagebreak
+En este caso particular la materia "Matematica 1 / Analisis 1"
+
+es accedida desde dos caminos distintos:
+\salto{\baselineskip}
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{diagrama1.png}
+\end{figure*}
+\anotacion[ForestGreen]{Nota: En la instancia de la clase Materia, se podria almacenar todos los alumnos inscriptos, o que cada instancia de Alumno contener todas las materias a las que esta inscripto; aun no decidimos como resolverlo.}
+\pagebreak
+\section*{Dudas:}
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{duda1.png}
+\end{figure*}
+\pagebreak
+\section*{Pseudoresoluciones:}
+{\vspace*{-2ex}\hspace*{4em} \small Las que pase a limpio al menos.}
+
+
+\subsection*{7. carreras(in sistema: SistemaSIU):seq\smm{string}}
+\{
+
+\{
+
+    ArrayList lista = new ArrayList() \hfill $\color{Purple}\longleftarrow O(1)$
+    
+    Iterador it= nuevo iterador del sistemaSIU \hfill $\color{Purple}\longleftarrow O(1)$
+
+    while(iterador.haySiguiente()){\hfill $\color{Purple}\longleftarrow O(\sum_{c\in C}^{} |c|)$
+
+        \hspace*{1.5em} lista.add(iterador.siguiente())
+
+    }
+
+    return lista \hfill $\color{Purple}\longleftarrow O(1)$
+
+\}\hfill $\color{Purple} O(1+1+\sum_{c\in C}^{} |c| +1 )\equiv O(\sum_{c\in C}^{} |c|)$
+
+\noindent\}
+
+\salto{\baselineskip}
+\anotacionns[ForestGreen]{Nota: el iterador del trie devuelve los strings ordenador de forma lexicografica.}
+
+\subsection*{8. materias(in sistema: SistemaSIU, in carrera: string):seq\smm{string}}
+\{
+
+\{
+
+    Materias materia = Carreras.buscar(carrera) \hfill $\color{Purple}\longleftarrow O(|carrera|)$
+
+    ArrayList lista = new ArrayList() \hfill $\color{Purple}\longleftarrow O(1)$
+    
+    Iterador it= nuevo iterador del la carrera \hfill $\color{Purple}\longleftarrow O(1)$
+
+    while(iterador.haySiguiente()){\hfill $\color{Purple}\longleftarrow O(\sum_{m_c\in M_c}^{} |m_c|)$
+
+        \hspace*{1.5em} lista.add(iterador.siguiente())
+
+    }
+
+    return lista \hfill $\color{Purple}\longleftarrow O(1)$
+
+\}
+
+\noindent\}\hfill $\color{Purple} O(|carrera|+1+1+\sum_{m_c\in M_c}^{} |m_c| +1 )\equiv O(|carrera|+\sum_{m_c\in M_c}^{} |m_c|)$
+
+\salto{\baselineskip}
+\anotacionns[ForestGreen]{Nota: el iterador del trie devuelve los strings ordenador de forma lexicografica.}
+\end{document}

@@ -1,0 +1,86 @@
+\usepackage{changepage}
+\usepackage{xcolor}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[left=1.5cm, right=2cm, top=1cm, bottom=2cm]{geometry}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\renewcommand*\ttdefault{txtt}
+\renewcommand*\familydefault{\ttdefault} %% Only if the base font of the document is to be typewriter style
+\newcommand{\tbft}[2]{\par\addvspace{\baselineskip}\textbf{#1}\hspace{0.35em}{#2}\\\par\addvspace{\baselineskip}}
+\newcommand{\ejercicio}[2]{\par\addvspace{\baselineskip}\textbf{Ejercicio #1.}\hspace{0.35em}{#2}\\\par\addvspace{\baselineskip}}
+% \ejercicio{NUMERO}{ENUNCIADO}
+%   Devuelve
+% Ejercicio NUMERO. ---- ENUNCIADO ----
+%
+%formato
+\newcommand{\salto}[1]{\par\addvspace{#1}}
+\newcommand{\rojo}[1]{{\color{red}#1}}
+\newcommand{\anotacion}[2][red]{\salto{1ex}\noindent\texttt{\color{#1}#2}\salto{1ex}}
+\newcommand{\anotacionns}[2][red]{\noindent\texttt{\color{#1}#2}}
+%
+% si y solo si corto y largo
+\newcommand{\sii}{\leftrightarrow}
+\newcommand{\siiLargo}{\longleftrightarrow}
+\newcommand{\slr}[1]{\ensuremath{\langle #1\rangle}}
+\newcommand{\smm}[1]{\textless #1\textgreater}
+\newcommand{\encabezadoTAD}[1]{\par\salto{1ex}\noindent TAD\ \ \normalfont\ttfamily#1 }
+\newenvironment{tad}[1]{
+\newcommand{\nombretad}{{\ttfamily#1}}
+\newcommand{\nt}{\nombretad}
+\newcommand{\obs}[2]{\par\noindent{\ttfamily obs} ##1: ##2\par}
+\encabezadoTAD{#1}\{
+    \begin{adjustwidth}{3em}{0em}}
+{\end{adjustwidth}\par\}}
+% \begin{tad}{nombre del tad}
+%   AGREGAR UN OBSERVADOR
+%     \obs{nombre observador}{tipo}
+%     \nombretad <---------- DEVUELVE EL NOMBRE DEL TAD (du)
+%
+%   y aca se pueden usar todos los procs y cosas de la catedra
+%
+%     \end{tad}
+\newcommand{\encabezadoImpl}[3]{\par\salto{1ex}\noindent \textbf{impl}\ \normalfont\ttfamily#1(#2):#3}
+\newcommand{\asg}[2]{\salto{0em}\noindent{\ttfamily #1}:= #2\salto{0em}}
+\newcommand{\asgns}[2]{\noindent{\ttfamily #1}:= #2}
+\newenvironment{impl}[3]{\encabezadoImpl{#1}{#2}{#3}\{
+\begin{adjustwidth}{3em}{0em}
+}
+{\end{adjustwidth}\par\}}
+\newcommand{\encabezadoDesign}[2]{\par\salto{1ex}\noindent \textbf{modulo}\ {\normalfont\ttfamily #1} \textbf{implementa}{ \normalfont\ttfamily #2}}
+\newenvironment{design}[2]{\encabezadoDesign{#1}{#2}\{
+\newcommand{\var}[2]{\salto{0em}\noindent{\normalfont \bfseries var} \texttt{##1}: \texttt{##2}\salto{0em}}
+\begin{adjustwidth}{3em}{0em}
+}
+{\end{adjustwidth}\}}
+\newcommand{\ifthel}[3]{\salto{0ex}
+\noindent{\normalfont \bfseries if}{ #1 }{\normalfont \bfseries then}\salto{0ex}
+\noindent{\begin{adjustwidth}{1.5em}{0em}#2\end{adjustwidth}}\salto{0ex}
+\noindent{\normalfont \bfseries else}\begin{adjustwidth}{1.5em}{0em}{#3}\end{adjustwidth}\salto{0ex}
+\noindent{\bfseries end if}}\salto{0ex}
+\newcommand{\while}[2]{
+    \salto{0em}\noindent
+    {\normalfont \bfseries while} \ensuremath{#1} \textbf{do}
+    \begin{adjustwidth}{1.5em}{0em}{#2}\end{adjustwidth}\salto{0em}\noindent{\normalfont \bfseries end while}
+}
+\newcommand{\invrep}[2]{\salto{0em}\noindent{\bfseries pred} InvRep (#1)\{\salto{0em}\noindent\begin{adjustwidth}{2em}{0em}{#2}\end{adjustwidth}\salto{0em}\noindent\}}
+\newcommand{\abs}[2]{\salto{0em}\noindent{\bfseries pred} Abs (#1)\{\salto{0em}\noindent\begin{adjustwidth}{2em}{0em}{#2}\end{adjustwidth}\salto{0em}\noindent\}}
