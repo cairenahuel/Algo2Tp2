@@ -2,6 +2,9 @@ package aed;
 
 public class PunteroMateriaYNombre {
 
+    //Propuesta de invariante de representacion de esta clase:
+    //  *Que nombreEspecifico pertenezca a punteroCarrera
+
     //Puntero hacia la carrera a la cual pertenece la materia
     private Trie<Materia> punteroCarrera;
 
