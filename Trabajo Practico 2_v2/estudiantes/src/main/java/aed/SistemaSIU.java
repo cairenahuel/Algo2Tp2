@@ -1,12 +1,17 @@
 package aed;
 
+import java.util.ArrayList;
+
 public class SistemaSIU {
+
+    private Trie<Trie<Materia>> carreras;
+    private Trie<Integer> estudiantes;
 
     enum CargoDocente{
         AY2,
         AY1,
         JTP,
-        PROF
+        PROF;
     }
 
     public SistemaSIU(InfoMateria[] infoMaterias, String[] libretasUniversitarias){
