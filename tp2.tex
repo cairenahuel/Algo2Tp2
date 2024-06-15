@@ -1,4 +1,5 @@
 \documentclass[a4paper,10pt]{article}
+\input{AEDmacros.tex}
 \input{nahuelMacros.tex}
 \usepackage{graphicx}
 \usepackage[dvipsnames]{xcolor}
@@ -33,13 +34,13 @@ Libretas universitarias $\rightarrow$ Trie acotado, lo que implica que las opera
 
 \salto{\baselineskip}
 
-NombreCarreras $\rightarrow$ Trie no acotado, operaciones O(log(n))
+NombreCarreras $\rightarrow$ Trie no acotado, operaciones O(|n|)
 
 {\small El nodo significativo apuntara a la instancia de la Carrera}
 
 \salto{\baselineskip}
 
-NombreMaterias $\rightarrow$ Trie no acotado, operaciones O(log(n))
+NombreMaterias $\rightarrow$ Trie no acotado, operaciones O(|n|)
 
 {\small El nodo significativo apuntara a la instancia de Materia}
 
@@ -128,4 +129,61 @@ es accedida desde dos caminos distintos:
 
 \salto{\baselineskip}
 \anotacionns[ForestGreen]{Nota: el iterador del trie devuelve los strings ordenador de forma lexicografica.}
+
+\{
+
+    Trie materias = Carreras.buscar(nombreCarrera) \hfill $\color{Purple}\longleftarrow O(|nombreCarrera|)$
+
+    Materia materia =  materias.buscar(nombreMateria) \hfill $\color{Purple}\longleftarrow O(|nombreMateria|)$
+
+    Iterador iteNomMaterias = nuevo iterador materia.listaTuplas \hfill $\color{Purple}\longleftarrow O(1)$
+    
+    while (iteNomMaterias.haySiguiente())\{\hfill $\color{Purple}\longleftarrow O(\sum_{n\in N_m}^{} |n|)$
+
+    \hspace*{1.5em} tupla\smm{Carrera, String} tuplaInfo = iteNomMaterias.siguiente() \hfill $\color{Purple}\longleftarrow O(1)$
+
+    \hspace*{1.5em} tuplaInfo[0].eliminar(tuplaInfo[1]) \hfill $\color{Purple}\longleftarrow O(|nombreMateria|)$
+
+    \}
+
+    Iterador iteEstudiante = nuevo iterador materia.listaInscriptos\hfill $\color{Purple}\longleftarrow O(1)$
+
+    while (iteEstudiante.haySiguiente())\{\hfill $\color{Purple}\longleftarrow O(E_m)$
+
+    \hspace{1.5em} luActual = iteEstudiante.siguiente() \hfill $\color{Purple}\longleftarrow O(1)$
+
+    \hspace*{1.5em} SistemaSIU.estudiantes.restarUno(luActual) \hfill $\color{Purple}\longleftarrow O(1)$
+    
+    \}
+
+\}\hfill {$\color{Purple} |nombreCarrera|+|nombreMateria|+\sum_{n\in N_m}^{} |n| + E_m $ \color{Purple}(\emph{o algo asi})}
+\pagebreak
+\section*{Resumen:}
+
+\salto{\baselineskip}
+
+\begin{design}{Materia}{nada}
+    \var{contadorInscriptos}{int}
+    \var{listaInscriptos}{ArrayList\smm{String}}
+    \var{listaTuplas}{ArrayList\smm{ tupla\smm{Carrera, String} }}
+    \var{docentes}{Arreglo<int>[4]}
+\end{design}
+
+\begin{design}{SistemaSIU}{nada}
+    \var{Carreras}{Trie \smm{Trie\smm{Materia} }}
+    \var{Estudiantes}{Trie \smm{int}}
+
+\end{design}
+\begin{design}{Trie\smm{B}}{Diccionario\smm{B}}
+    
+    {\color{ForestGreen} Como implementamos un trie? es el dicicionario sobre trie que vimos en el laboratorio?}
+\end{design}
+
+Carreras seria una instancia de Trie cuyos nodos significativos apuntan a otros tries, que representan a las materias.
+
+Materias es una instancia de Trie cuyos nodos significativos son instancias de Materia.
+
+Estudiantes es una instancia de Trie cuyos nodos significativos seran la cantidad de materias a las que este estudiante esta incripto.
+
+
 \end{document}
