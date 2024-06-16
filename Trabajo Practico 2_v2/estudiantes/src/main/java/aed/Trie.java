@@ -16,8 +16,8 @@ public class Trie<T> {
         Nodo(T valorDado, Nodo padreDado) {
             this.padre = padreDado;
             this.valor = valorDado;
-            int i = 0;
-            while (i < 256) {
+            int i = 0; //O(1)
+            while (i < 256) {//O(256)*(O(1)+O(1))
                 siguientes.add(null);
                 i++;
             }
@@ -28,12 +28,12 @@ public class Trie<T> {
     int tamanio;
 
     public void definir(T valorDado, String donde) {
-        if (this.raiz == null) {
-            raiz = new Nodo(null, null);
+        if (this.raiz == null) { //O(1)
+            raiz = new Nodo(null, null);//O(256)
         }
-        int i = 0;
-        Nodo actual = raiz;
-        while (i < donde.length()) {
+        int i = 0;//O(1)
+        Nodo actual = raiz;//O(1)
+        while (i < donde.length()) {//O(sum_{0}^{|donde|}) * O(1) acá no se si iria O(1) o O(256) o si como 256 es constante simplificamos a O(1)
             int numeroDelChar = (int) donde.charAt(i);
             Nodo siguiente = actual.siguientes.get(numeroDelChar);
 
@@ -55,10 +55,12 @@ public class Trie<T> {
 
             } else {
 
-                if (i == donde.length() - 1) { // Si hay siguiente nodo y ademas estoy en el ultimo char de la
+                if (i == donde.length() - 1) { // Si hay siguiente nodo y ademas estoy en el ultimo char del
                                                // string, defino este nodo.
+                    if (siguiente.valor == null) {
+                        this.tamanio += 1;
+                    }
                     siguiente.valor = valorDado;
-                    this.tamanio += 1;
                 } else {
                     actual = siguiente;
                 }
@@ -144,20 +146,48 @@ public class Trie<T> {
         }
     }
 
+    public T obtener(String buscado) {
+
+        // Si lo encuentra devuelve el valor del nodo, sino devuelve null
+        if (raiz == null) {
+            return null;
+        }
+        int largo = buscado.length();
+        int i = 0;
+        Nodo actual = raiz;
+        while (i < largo) {
+            int indiceCaracter = (int) buscado.charAt(i);
+            if (i == largo - 1) {
+                if (actual == null) {
+                    return null;
+                }
+                Nodo siguiente = actual.siguientes.get(indiceCaracter);
+                if (siguiente==null||siguiente.valor==null) {
+                    return null;
+                }
+                return siguiente.valor;
+            }else{
+                if (actual == null) {
+                    return null;
+                }
+                Nodo siguiente = actual.siguientes.get(indiceCaracter);
+                actual=siguiente;
+            }
+            i++;
+        }
+        return null;
+    }
+
+    //en general creo que las complejidades dan
+
     // por si quieren testearlo
 
     // public static void main(String[] args) {
     //     Trie<Integer> trie = new Trie<Integer>();
     //     trie.definir(1, "que");
-    //     trie.definir(2, "queso");
+    //     trie.definir(2, "que");
     //     trie.definir(4, "peso");
-    //     System.out.println(trie.definido("que"));
-    //     System.out.println(trie.definido("queso"));
-    //     trie.eliminar("que");
-    //     trie.eliminar("queso");
-    //     trie.eliminar("peso");
-    //     System.out.println(trie.definido("que"));
-    //     System.out.println(trie.definido("quesop"));
+    //     System.out.println(trie.buscarNodo("quesoj"));
     // }
 
 }
