@@ -37,15 +37,28 @@ public class SistemaSIU {
         Trie<Materia> materiasTrie = carreras.obtener(carrera);
         Materia instanciaMateria=materiasTrie.obtener(materia);
         instanciaMateria.sumarEstudiante(estudiante);
-        estudiantes.definir(+1, estudiante);
+        int cantInscripciones=estudiantes.obtener(estudiante);
+        estudiantes.definir(cantInscripciones+1, estudiante);
     }
 
     public void agregarDocente(CargoDocente cargo, String carrera, String materia){
-        throw new UnsupportedOperationException("Método no implementado aún");	    
+        Trie<Materia> materiasTrie = carreras.obtener(carrera);
+        Materia instanciaMateria=materiasTrie.obtener(materia);
+        if (cargo==CargoDocente.AY2) {
+            instanciaMateria.agregarAY2();
+        }        if (cargo==CargoDocente.AY1) {
+            instanciaMateria.agregarAY1();
+        }        if (cargo==CargoDocente.JTP) {
+            instanciaMateria.agregarJTP();
+        }        if (cargo==CargoDocente.PROF) {
+            instanciaMateria.agregarProfe();
+        }
     }
 
     public int[] plantelDocente(String materia, String carrera){
-        throw new UnsupportedOperationException("Método no implementado aún");	    
+        Trie<Materia> materiasTrie = carreras.obtener(carrera);
+        Materia instanciaMateria=materiasTrie.obtener(materia);
+        return instanciaMateria.getPlantel();   
     }
 
     public void cerrarMateria(String materia, String carrera){
@@ -59,7 +72,18 @@ public class SistemaSIU {
     }
 
     public boolean excedeCupo(String materia, String carrera){
-        throw new UnsupportedOperationException("Método no implementado aún");	    
+        int estudiantes=inscriptos(materia, carrera);
+        int[] plantel=plantelDocente(materia, carrera);
+        if (estudiantes<=plantel[0]*250) {
+            return false;
+        }else if(estudiantes<=plantel[1]*100){
+            return false;
+        }else if (estudiantes<=plantel[2]*20) {
+            return false;
+        }else if (estudiantes<=plantel[3]*30) {
+            return false;
+        }
+        return true;
     }
 
     public String[] carreras(){
@@ -71,6 +95,6 @@ public class SistemaSIU {
     }
 
     public int materiasInscriptas(String estudiante){
-        throw new UnsupportedOperationException("Método no implementado aún");	    
+        return estudiantes.obtener(estudiante);  
     }
 }
