@@ -1,6 +1,7 @@
 package aed;
 
 public class ParCarreraMateria {
+
     String carrera;
     String nombreMateria;
 

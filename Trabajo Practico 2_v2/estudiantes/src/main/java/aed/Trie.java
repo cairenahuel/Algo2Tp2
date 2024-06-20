@@ -1,23 +1,39 @@
 package aed;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Trie<T> {
 
+    /*
+     * 
+     * Invariante de representacion:
+     * 
+     * -> Hay una unica forma de llegar a cada nodo. (No hay ciclos)
+     * 
+     * -> Todos los nodos tienen hijos o tienen significado.
+     * 
+     */
+
     private class Nodo {
-        Nodo padre;
+
+        /*
+         * 
+         * Invariante de representacion:
+         * 
+         * -> hijos es mayor a 0 o tengo valor distinto de null
+         * 
+         */
+
         ArrayList<Nodo> siguientes = new ArrayList<>(256);
-        // ArrayList<Character> hijosNoNulos = new ArrayList<>(); todavia no se si usar
-        // esto
         int hijos = 0;
 
         T valor = null;
 
-        Nodo(T valorDado, Nodo padreDado) {
-            this.padre = padreDado;
+        Nodo(T valorDado) {
             this.valor = valorDado;
-            int i = 0; //O(1)
-            while (i < 256) {//O(256)*(O(1)+O(1))
+            int i = 0; // O(1)
+            while (i < 256) {// O(256)*(O(1)+O(1))
                 siguientes.add(null);
                 i++;
             }
@@ -28,12 +44,13 @@ public class Trie<T> {
     int tamanio;
 
     public void definir(T valorDado, String donde) {
-        if (this.raiz == null) { //O(1)
-            raiz = new Nodo(null, null);//O(256)
+        if (this.raiz == null) { // O(1)
+            raiz = new Nodo(null);// O(256)
         }
-        int i = 0;//O(1)
-        Nodo actual = raiz;//O(1)
-        while (i < donde.length()) {//O(sum_{0}^{|donde|}) * O(1) acá no se si iria O(1) o O(256) o si como 256 es constante simplificamos a O(1)
+        int i = 0;// O(1)
+        Nodo actual = raiz;// O(1)
+        while (i < donde.length()) {// O(sum_{0}^{|donde|}) * O(1) acá no se si iria O(1) o O(256) o si como 256 es
+                                    // constante simplificamos a O(1)
             int numeroDelChar = (int) donde.charAt(i);
             Nodo siguiente = actual.siguientes.get(numeroDelChar);
 
@@ -41,13 +58,13 @@ public class Trie<T> {
 
                 if (i == donde.length() - 1) { // Si el siguiente es nulo y ademas estoy en el ultimo char, ese nodo
                                                // va a ser el definido.
-                    Nodo nuevo = new Nodo(valorDado, actual);
+                    Nodo nuevo = new Nodo(valorDado);
                     actual.siguientes.set(numeroDelChar, nuevo);
                     actual.hijos += 1;
                     actual = nuevo;
                     this.tamanio += 1;
                 } else { // Sino, creo un nuevo nodo y lo agrego al trie
-                    Nodo nuevo = new Nodo(null, actual);
+                    Nodo nuevo = new Nodo(null);
                     actual.hijos += 1;
                     actual.siguientes.set(numeroDelChar, nuevo);
                     actual = nuevo;
@@ -162,32 +179,66 @@ public class Trie<T> {
                     return null;
                 }
                 Nodo siguiente = actual.siguientes.get(indiceCaracter);
-                if (siguiente==null||siguiente.valor==null) {
+                if (siguiente == null || siguiente.valor == null) {
                     return null;
                 }
                 return siguiente.valor;
-            }else{
+            } else {
                 if (actual == null) {
                     return null;
                 }
                 Nodo siguiente = actual.siguientes.get(indiceCaracter);
-                actual=siguiente;
+                actual = siguiente;
             }
             i++;
         }
         return null;
     }
 
-    //en general creo que las complejidades dan
+    public String[] imprimir() {
+        List<String> cadena = new ArrayList<>();
+        imprimirAux(raiz, new StringBuilder(), cadena);
+        return cadena.toArray(new String[0]);
+    }
 
-    // por si quieren testearlo
+    private void imprimirAux(Nodo nodo, StringBuilder cadena, List<String> lista) {
+        if (nodo == null) {
+            return;
+        }
 
-    // public static void main(String[] args) {
-    //     Trie<Integer> trie = new Trie<Integer>();
-    //     trie.definir(1, "que");
-    //     trie.definir(2, "que");
-    //     trie.definir(4, "peso");
-    //     System.out.println(trie.buscarNodo("quesoj"));
-    // }
+        int i = 0;
+        int hijosEncontrados = 0;
+        while (i < 255 && hijosEncontrados < nodo.hijos) {
 
+            Nodo actual = nodo.siguientes.get(i);
+
+            if (actual != null) {
+                char caracter = (char) i;
+                cadena.append(caracter);
+
+                if (actual.valor != null) {
+                    lista.add(cadena.toString());
+                }
+
+                imprimirAux(actual, cadena, lista);
+                cadena.deleteCharAt(cadena.length() - 1);
+                hijosEncontrados++;
+            }
+
+            i++;
+        }
+
+        // en general creo que las complejidades dan
+
+        // por si quieren testearlo
+
+        // public static void main(String[] args) {
+        // Trie<Integer> trie = new Trie<Integer>();
+        // trie.definir(1, "que");
+        // trie.definir(2, "que");
+        // trie.definir(4, "peso");
+        // trie.inorder();
+        // }
+
+    }
 }

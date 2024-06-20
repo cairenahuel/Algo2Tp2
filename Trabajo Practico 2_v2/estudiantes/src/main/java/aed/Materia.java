@@ -2,7 +2,24 @@ package aed;
 
 import java.util.ArrayList;
 
-// import aed.SistemaSIU.CargoDocente;
+    /*
+     * 
+     * Invariante de representacion:
+     * 
+     *  -> contadorInscriptos debe ser positivo.
+     * 
+     *  -> la longitud de listaInscriptos es igual a
+     *  contadorInscriptos
+     * 
+     *  -> todos los elementos de lista inscriptos 
+     *  son strings que representan 
+     *  el identificador de un alumno particular
+     * 
+     *  -> todos los elementos de listaCarreraMateria tienen
+     *  en su primer indice una carrera, y en su segundo indice
+     *  el nombre de esta materia en dicha carrera.
+     *  
+     */
 
 public class Materia {
 
@@ -14,11 +31,31 @@ public class Materia {
     public int[] getPlantel(){
         return cargos;
     }
+    public void agregarReferencia(Trie<Materia> punteroCarrera, String nombreMateria){
+        PunteroMateriaYNombre nueva = new PunteroMateriaYNombre(punteroCarrera, nombreMateria);
+        listaCarreraMateria.add(nueva);
+    }
+    public int getLargoReferencias(){
+        return listaCarreraMateria.size();
+    }
+    public PunteroMateriaYNombre getReferencia(int indice){
+        return listaCarreraMateria.get(indice);
+    }
 
     public void sumarEstudiante(String libreta) {
-        // ############RECONTRA PLACEHOLDER NO SE SI ESTA BIEN
         listaInscriptos.add(libreta);
         this.contadorInscriptos++;
+    }
+    public String[] getInscriptos(){
+
+        int largo = listaInscriptos.size();
+        int i =0;
+        String[] res=new String[largo];
+        while (i<largo) {
+            res[i]=listaInscriptos.get(i);
+            i++;
+        }
+        return res;
     }
 
     public int cantidadDeInscriptos() {
