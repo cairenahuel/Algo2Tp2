@@ -1,6 +1,5 @@
 package aed;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Trie<T> {
 
@@ -327,22 +326,33 @@ public class Trie<T> {
     }
 
 
-    // No te se justificar la complejidad del imprimir pues es recursiva
+    // Sinceramente no se bien como justificar la complejidad de una recursion
 
     public String[] imprimir() {
-        List<String> cadena = new ArrayList<>();
-        imprimirAux(raiz, new StringBuilder(), cadena);
-        return cadena.toArray(new String[0]);
+        // O(1)
+        ArrayList<String> lista = new ArrayList<>();
+        
+        //Revisa todos los nodos del trie por lo que
+        //  O(sum_{palabra in trie} |palabra| )
+        imprimirAux(raiz, new StringBuilder(), lista);
+
+        // acá .toArray tiene O(|lista|), osea de la cantidad
+        // de palabras que tiene mi lista, pero como
+        // imprimirAux va a ser llamado n veces, donde
+        // n es la cantidad de nodos de mi trie, asumo que
+        // la complejidad de imprimirAux se lo va a comer.
+        return lista.toArray(new String[0]);
     }
 
-    private void imprimirAux(Nodo nodo, StringBuilder cadena, List<String> lista) {
+    private void imprimirAux(Nodo nodo, StringBuilder cadena, ArrayList<String> lista) {
         if (nodo == null) {
             return;
         }
 
         int i = 0;
+        int cantHijos = nodo.hijos;
         int hijosEncontrados = 0;
-        while (i < 256 && hijosEncontrados < nodo.hijos) {
+        while (i < 256 && hijosEncontrados < cantHijos) {
 
             Nodo actual = nodo.siguientes.get(i);
 
