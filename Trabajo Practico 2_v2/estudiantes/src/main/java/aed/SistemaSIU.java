@@ -46,6 +46,7 @@ public class SistemaSIU {
             // A cada par carrera materia le...
             // O(|listaParesCarreraMateria|)
             for (ParCarreraMateria parCarreraMateria : listaParesCarreraMateria) {
+                // ¿Hay que usar los getter?
                 String nombreCarrera = parCarreraMateria.carrera;
                 String nombreMateria = parCarreraMateria.nombreMateria;
 
@@ -74,16 +75,23 @@ public class SistemaSIU {
                 // O(|nombreMateria|)
                 trieCarrera.definir(instanciaMateria, nombreMateria);
             }
+            // Entonces, este bloque for nos queda
+            // -> O(Sum(0,|listaParesCarreraMateria|-1,|nombreCarrera|+|nombreMateria|))
         }
-        /*
-         * Si bien la complejidad no es exactamente como en el enunciado, creo que
-         * cumple porque solo cargamos
-         * todas las materias y todas las carreras a medida que entran (y los
-         * estudiantes), no veo la forma de conectar
-         * el infoMaterias con las variables de complejidad que nos dan (pregunta para
-         * el recuperatorio)
-         */
+        // Entonces, este otro bloque for nos queda
+        // -> O(Sum(0,|infoMaterias|-1,Sum(0,|listaParesCarreraMateria|-1,|nombreCarrera|+|nombreMateria|)))
     }
+
+    /*
+     * En total, nos queda
+     * O(|libretasUniversitarias| + Sum(0,|infoMaterias|-1,Sum(0,|listaParesCarreraMateria|-1,|nombreCarrera|+|nombreMateria|)))
+     * Si bien la complejidad no es exactamente como en el enunciado, creemos que
+     * cumple porque solo cargamos
+     * todas las materias y todas las carreras a medida que entran (y los
+     * estudiantes), no veo la forma de conectar
+     * el infoMaterias con las variables de complejidad que nos dan (pregunta para
+     * el recuperatorio)
+     */
 
     public void inscribir(String estudiante, String carrera, String materia) {
         // O(|carrera|)
@@ -154,7 +162,7 @@ public class SistemaSIU {
         int i = 0;
         // O(1)
         int largoReferencias = instanciaMateria.getLargoReferencias();
-        // O(sum_{i=0}^{largoReferencias-1})
+        // O(sum(0,largoReferencias-1,|nombre|))
         while (i < largoReferencias) {
             // O(1)
             PunteroMateriaYNombre info = instanciaMateria.getReferencia(i);
@@ -170,11 +178,11 @@ public class SistemaSIU {
         // O(1)
         String[] lista = instanciaMateria.getInscriptos();
         // O(1)
-        int largoInscriptos = lista.length;
+        int cantidadInscriptos = lista.length;
         // O(1)
         int j = 0;
-        // O(sum_{j=0}^{largo-1})
-        while (j < largoInscriptos) {
+        // O(sum(0,largoInscriptos-1,1)) = O(largoInscriptos)
+        while (j < cantidadInscriptos) {
             // O(1)
             int cantMaterias = estudiantes.obtener(lista[j]);
             // O(1)
@@ -183,11 +191,11 @@ public class SistemaSIU {
             j++;
         }
         /*
-         * O(|carrera|)+O(|materia|)+O(sum_{ref in referencias} |nombre|) + O(sum_{est
-         * in estInscriptos} 1)
+         * O(|carrera|)+O(|materia|)+O(sum(ref in referencias,|nombre|))+ O(sum(0,|cantidadInscriptos|, 1))
+         * = O(|carreras| + |materia| + sum(ref in referencias, |nombre|) + |cantidadInscriptos|)
+         * 
          * referencias es una lista con duplas de punteros y strings, es basicamente
-         * todos
-         * los nombres de esta materia
+         * todos los nombres de esta materia
          *
          * Y listaIncriptos es la lista de inscriptos cuyo while corresponde al ultimo
          * termino de la suma anterior.
@@ -210,7 +218,9 @@ public class SistemaSIU {
 
     public boolean excedeCupo(String materia, String carrera) {
         int estudiantes = inscriptos(materia, carrera);
+        // O(|carrera| + |materia|)
         int[] plantel = plantelDocente(materia, carrera);
+        // O(|carrera| + |materia|)
 
         if (estudiantes > plantel[0] * 250) {
             return true;
@@ -222,18 +232,25 @@ public class SistemaSIU {
             return true;
         }
         return false;
+        /*
+         * Entonces tenemos:
+         * O(|carrera|+|materia|)
+         */
     }
 
     public String[] carreras() {
         return carreras.imprimir();
+        // O(|carreras|)
     }
 
     public String[] materias(String carrera) {
         Trie<Materia> materiasTrie = carreras.obtener(carrera);
         return materiasTrie.imprimir();
+        // O(|materiasTrie|)
     }
 
     public int materiasInscriptas(String estudiante) {
         return estudiantes.obtener(estudiante);
+        // O(1)
     }
 }
