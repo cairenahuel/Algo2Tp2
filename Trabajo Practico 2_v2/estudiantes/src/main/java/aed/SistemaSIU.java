@@ -240,13 +240,15 @@ public class SistemaSIU {
 
     public String[] carreras() {
         return carreras.imprimir();
-        // O(|carreras|)
+        // O(carreras.tamanio + |lista|)
+        // donde |lista| es la cantidad de nodos significativos del trie
     }
 
     public String[] materias(String carrera) {
         Trie<Materia> materiasTrie = carreras.obtener(carrera);
         return materiasTrie.imprimir();
-        // O(|materiasTrie|)
+        // O(materiasTrie.tamanio + |lista|)
+        // donde |lista| es la cantidad de nodos significativos del trie
     }
 
     public int materiasInscriptas(String estudiante) {
