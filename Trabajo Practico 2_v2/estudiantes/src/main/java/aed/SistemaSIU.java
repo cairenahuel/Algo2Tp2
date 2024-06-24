@@ -7,11 +7,13 @@ public class SistemaSIU {
      * 
      * -> "carreras" y "estudiantes" son instancias validas de trie.
      * 
-     * -> todos los nodos con valor de "carreras" son punteros
-     * a instancias de trie cuyos nodos con valor son
-     * punteros a objetos de la clase "materia"
+     * -> todos los nodos significativos de "carreras" son punteros
+     * a instancias de trie cuyos nodos significativos son
+     * punteros a objetos de la clase "materia". Y cada una de esas
+     * instancias de "materia" cumple con los invariantes
+     * definidos en <Materia.java>
      * 
-     * -> todos los nodos con valor de "estudiantes"
+     * -> todos los nodos significativos de "estudiantes"
      * son numeros positivos o cero que representan la
      * cantidad materias a las que dicho estudiante esta incripto
      * 
@@ -28,6 +30,7 @@ public class SistemaSIU {
     }
 
     public SistemaSIU(InfoMateria[] infoMaterias, String[] libretasUniversitarias) {
+
 
         // Cargamos todas las libretas en el trie "estudiantes"
         // Como todas las libretas son acotadas:
@@ -88,9 +91,9 @@ public class SistemaSIU {
      * Si bien la complejidad no es exactamente como en el enunciado, creemos que
      * cumple porque solo cargamos
      * todas las materias y todas las carreras a medida que entran (y los
-     * estudiantes), no veo la forma de conectar
-     * el infoMaterias con las variables de complejidad que nos dan (pregunta para
-     * el recuperatorio)
+     * estudiantes).
+     * No vemos la forma de conectar el infoMaterias con las variables de 
+     * complejidad que nos dan (pregunta para el recuperatorio)
      */
 
     public void inscribir(String estudiante, String carrera, String materia) {
@@ -175,30 +178,30 @@ public class SistemaSIU {
             // O(1)
             i++;
         }
+        // O(instanciaMateria.contadorInscriptos)
+        String[] listaInscriptos = instanciaMateria.getInscriptos();
         // O(1)
-        String[] lista = instanciaMateria.getInscriptos();
-        // O(1)
-        int cantidadInscriptos = lista.length;
+        int cantidadInscriptos = listaInscriptos.length;
         // O(1)
         int j = 0;
-        // O(sum(0,largoInscriptos-1,1)) = O(largoInscriptos)
+        // O(sum(0,cantidadInscriptos,1)) = O(cantidadInscriptos)
         while (j < cantidadInscriptos) {
             // O(1)
-            int cantMaterias = estudiantes.obtener(lista[j]);
+            int cantMaterias = estudiantes.obtener(listaInscriptos[j]);
             // O(1)
-            estudiantes.definir(cantMaterias - 1, lista[j]);
+            estudiantes.definir(cantMaterias - 1, listaInscriptos[j]);
             // O(1)
             j++;
         }
         /*
-         * O(|carrera|)+O(|materia|)+O(sum(ref in referencias,|nombre|))+ O(sum(0,|cantidadInscriptos|, 1))
-         * = O(|carreras| + |materia| + sum(ref in referencias, |nombre|) + |cantidadInscriptos|)
+         * O(|carrera|)+O(|materia|)+O(sum(ref in referencias,|nombre|))+ O(sum(0,cantidadInscriptos - 1, 1))
+         * = O(|carrera| + |materia| + sum(ref in referencias,|nombre|) + cantidadInscriptos)
          * 
-         * referencias es una lista con duplas de punteros y strings, es basicamente
-         * todos los nombres de esta materia
+         * referencias es una lista de objetos PunteroMateriaYNombre, 
+         * la cual representa todos los nombres de esta materia
          *
-         * Y listaIncriptos es la lista de inscriptos cuyo while corresponde al ultimo
-         * termino de la suma anterior.
+         * Y listaInscriptos es la lista que contiene todas las libretas universitarias
+         * de los alumnos que estan inscriptos a esta materia.
          * 
          */
     }
@@ -222,15 +225,21 @@ public class SistemaSIU {
         int[] plantel = plantelDocente(materia, carrera);
         // O(|carrera| + |materia|)
 
+        // O(1)
         if (estudiantes > plantel[0] * 250) {
+            // O(1)
             return true;
         } else if (estudiantes > plantel[1] * 100) {
+            // O(1)
             return true;
         } else if (estudiantes > plantel[2] * 20) {
+            // O(1)
             return true;
         } else if (estudiantes > plantel[3] * 30) {
+            // O(1)
             return true;
         }
+        // O(1)
         return false;
         /*
          * Entonces tenemos:
@@ -253,6 +262,6 @@ public class SistemaSIU {
 
     public int materiasInscriptas(String estudiante) {
         return estudiantes.obtener(estudiante);
-        // O(1)
+        // O(1) (por acotado)
     }
 }
